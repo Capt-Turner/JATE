@@ -17,13 +17,34 @@ module.exports = () => {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
     },
-    plugins: [
+    plugins:[
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest:'src-sw.js',
+      }),
+
+      new WebpackPwaManifest({
+        name:'JATE',
+        description:'Just Another Text Editor',
+      }),
       
     ],
 
-    module: {
-      rules: [
-        
+    module:{
+      rules:[
+        {
+          test:/\.css$/i,
+          use:['style-loader', 'css=loader'],
+        },
+        {
+          use:{
+            loader:'babel-loader',
+            options:{
+              presets:['@babel/preset-env'],
+              plugins:['@babel/plugin-proposal-object-rest-spread','@babel/transform-runtime'],
+            }
+          }
+        }
       ],
     },
   };
